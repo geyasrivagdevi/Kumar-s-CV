@@ -9,6 +9,8 @@ import {
   ArrowDownRight,
   ArrowUpRight,
   Github,
+  Linkedin,
+  Mail,
   MapPin,
 } from 'lucide-react';
 
@@ -146,8 +148,7 @@ function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: .7, delay: .55 }}
           >
-            Software-focused network engineer building Python backends, automation platforms,
-            internal web products and practical AI applications.
+            Backend / Software Engineer building Python automation, internal platforms and practical AI applications.
           </motion.p>
 
           <motion.div
@@ -207,7 +208,7 @@ function TransitionScene() {
   );
 }
 
-function ProjectScene({ project, index }: { project: (typeof projects)[number]; index: number }) {
+function ProjectScene({ project }: { project: (typeof projects)[number] }) {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
   const progress = useSpring(scrollYProgress, { stiffness: 90, damping: 24, mass: .65 });
@@ -305,8 +306,8 @@ function ExperienceScene() {
 function StackScene() {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
-  const band1 = useTransform(scrollYProgress, [0, 1], ['-6%', '8%']);
-  const band2 = useTransform(scrollYProgress, [0, 1], ['8%', '-6%']);
+  const band1 = useTransform(scrollYProgress, [0, 1], ['-3%', '4%']);
+  const band2 = useTransform(scrollYProgress, [0, 1], ['4%', '-3%']);
 
   return (
     <section ref={ref} id="stack" className="stack-cinema">
@@ -316,8 +317,8 @@ function StackScene() {
       </div>
 
       <div className="skill-bands" aria-hidden="true">
-        <motion.div style={{ x: band1 }}>PYTHON · DJANGO · AUTOMATION · APIs · PYTHON · DJANGO · AUTOMATION · APIs ·</motion.div>
-        <motion.div style={{ x: band2 }}>REACT · SQL · POWER BI · RAG · AGENTS · REACT · SQL · POWER BI · RAG · AGENTS ·</motion.div>
+        <motion.div style={{ x: band1 }}>PYTHON · DJANGO · AUTOMATION · APIs ·</motion.div>
+        <motion.div style={{ x: band2 }}>REACT · SQL · POWER BI · RAG · AGENTS ·</motion.div>
       </div>
 
       <div className="stack-cards-cinema">
@@ -387,9 +388,18 @@ function ContactScene() {
         <p className="contact-kicker">CURRENT FOCUS</p>
         <h3>Python backends, automation and practical AI products.</h3>
         <p className="contact-note">Toronto, ON · Canadian Permanent Resident</p>
-        <a href="https://github.com/kumarG99" target="_blank" rel="noreferrer" className="contact-link">
-          <Github size={18} /> GitHub <ArrowUpRight size={18} />
-        </a>
+
+        <div className="contact-links">
+          <a href="mailto:kumarguddepogu9@gmail.com" className="contact-link">
+            <Mail size={18} /> Email <ArrowUpRight size={18} />
+          </a>
+          <a href="https://www.linkedin.com/in/kumar-guddepogu" target="_blank" rel="noreferrer" className="contact-link">
+            <Linkedin size={18} /> LinkedIn <ArrowUpRight size={18} />
+          </a>
+          <a href="https://github.com/kumarG99" target="_blank" rel="noreferrer" className="contact-link">
+            <Github size={18} /> GitHub <ArrowUpRight size={18} />
+          </a>
+        </div>
       </motion.div>
 
       <div className="contact-location"><MapPin size={16} /> Toronto, ON, Canada</div>
@@ -431,7 +441,7 @@ export default function App() {
         </section>
 
         <div id="work"><TransitionScene /></div>
-        {projects.map((project, index) => <ProjectScene key={project.title} project={project} index={index} />)}
+        {projects.map((project) => <ProjectScene key={project.title} project={project} />)}
         <ExperienceScene />
         <StackScene />
         <ManifestoScene />
