@@ -1,16 +1,20 @@
-import React from 'react';
-import { motion } from 'motion/react';
-import { ArrowDownRight, ArrowUpRight, Github, MapPin } from 'lucide-react';
-
-const reveal = {
-  initial: { opacity: 0, y: 28 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, amount: 0.18 },
-  transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] as const },
-};
+import React, { useRef } from 'react';
+import {
+  motion,
+  useScroll,
+  useSpring,
+  useTransform,
+} from 'motion/react';
+import {
+  ArrowDownRight,
+  ArrowUpRight,
+  Github,
+  MapPin,
+} from 'lucide-react';
 
 const projects = [
   {
+    number: '01',
     category: 'NETWORK PLANNING PLATFORM',
     title: 'Port Inventory & Reservation Platform',
     description:
@@ -23,6 +27,7 @@ const projects = [
     ],
   },
   {
+    number: '02',
     category: 'NETWORK AUTOMATION',
     title: 'Network Management / SSH Portal',
     description:
@@ -35,6 +40,7 @@ const projects = [
     ],
   },
   {
+    number: '03',
     category: 'ENTERPRISE REPORTING',
     title: 'Budget Reporting Platform',
     description:
@@ -47,6 +53,7 @@ const projects = [
     ],
   },
   {
+    number: '04',
     category: 'AUTOMATION & ANALYTICS',
     title: 'Planning Automation & Operational Dashboards',
     description:
@@ -82,217 +89,353 @@ const experience = [
 ];
 
 const skillGroups = [
-  {
-    id: '01',
-    name: 'BACKEND',
-    description: 'Production-focused backend development and internal tooling.',
-    skills: ['Python', 'Django', 'REST APIs', 'PHP / Laravel', 'SQL'],
-  },
-  {
-    id: '02',
-    name: 'FRONTEND',
-    description: 'Practical interfaces for internal products, planners and operations teams.',
-    skills: ['React', 'JavaScript', 'HTML / CSS', 'DataTables', 'Chart.js'],
-  },
-  {
-    id: '03',
-    name: 'DATA & PLATFORM',
-    description: 'Databases, reporting and deployment environments used in day-to-day engineering.',
-    skills: ['MySQL', 'Power BI', 'Excel Automation', 'Git / GitHub', 'Linux / RHEL', 'IIS / Apache'],
-  },
-  {
-    id: '04',
-    name: 'AI / CURRENT FOCUS',
-    description: 'Building toward practical AI application engineering on top of a software foundation.',
-    skills: ['RAG', 'LLM APIs', 'AI Agents', 'MCP', 'GitHub Copilot'],
-  },
-];
+  ['BACKEND', ['Python', 'Django', 'REST APIs', 'PHP / Laravel', 'SQL']],
+  ['FRONTEND', ['React', 'JavaScript', 'HTML / CSS', 'DataTables', 'Chart.js']],
+  ['DATA & PLATFORM', ['MySQL', 'Power BI', 'Excel Automation', 'Git / GitHub', 'Linux / RHEL', 'IIS / Apache']],
+  ['AI / CURRENT FOCUS', ['RAG', 'LLM APIs', 'AI Agents', 'MCP', 'GitHub Copilot']],
+] as const;
 
 const scrollTo = (id: string) => {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 };
 
+function Hero() {
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] });
+
+  const imageScale = useTransform(scrollYProgress, [0, 1], [1.06, 1.22]);
+  const imageY = useTransform(scrollYProgress, [0, 1], ['0%', '10%']);
+  const imageOpacity = useTransform(scrollYProgress, [0.55, 1], [1, 0.18]);
+  const copyY = useTransform(scrollYProgress, [0, 1], ['0%', '-18%']);
+  const copyOpacity = useTransform(scrollYProgress, [0.58, 0.95], [1, 0]);
+  const gridY = useTransform(scrollYProgress, [0, 1], ['0px', '100px']);
+
+  return (
+    <section ref={ref} className="hero-cinema" id="top">
+      <div className="hero-sticky">
+        <motion.div className="hero-grid" style={{ y: gridY }} />
+
+        <motion.div className="hero-copy-cinema" style={{ y: copyY, opacity: copyOpacity }}>
+          <motion.p
+            className="eyebrow"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: .7, delay: .1 }}
+          >
+            Toronto · Backend · Automation · AI
+          </motion.p>
+
+          <div className="hero-lines" aria-label="I build systems that move work forward">
+            {['I build systems', 'that move', 'work forward.'].map((line, i) => (
+              <div className="line-mask" key={line}>
+                <motion.h1
+                  initial={{ y: '110%' }}
+                  animate={{ y: '0%' }}
+                  transition={{ duration: .85, delay: .15 + i * .11, ease: [0.22, 1, 0.36, 1] }}
+                  className={i > 0 ? 'muted-line' : ''}
+                >
+                  {line}
+                </motion.h1>
+              </div>
+            ))}
+          </div>
+
+          <motion.p
+            className="hero-subtitle-cinema"
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: .7, delay: .55 }}
+          >
+            Software-focused network engineer building Python backends, automation platforms,
+            internal web products and practical AI applications.
+          </motion.p>
+
+          <motion.div
+            className="hero-actions"
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: .7, delay: .7 }}
+          >
+            <button className="primary-cta" onClick={() => scrollTo('work')}>
+              Enter selected work <ArrowDownRight size={18} />
+            </button>
+            <button className="text-cta" onClick={() => scrollTo('experience')}>Experience</button>
+          </motion.div>
+        </motion.div>
+
+        <motion.div className="hero-image-stage" style={{ opacity: imageOpacity }}>
+          <motion.img
+            src="/kumar-hero.jpg"
+            alt="Kumar Guddepogu"
+            className="hero-image-cinema"
+            style={{ scale: imageScale, y: imageY }}
+          />
+          <div className="hero-image-vignette" />
+          <motion.div
+            className="availability-card"
+            initial={{ opacity: 0, y: 22 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: .7, delay: .85 }}
+          >
+            <span>Open to Backend, Software & AI Application Engineering roles</span>
+            <span className="status-dot">●</span>
+          </motion.div>
+        </motion.div>
+
+        <div className="hero-vertical-label">PORTFOLIO / 2026</div>
+        <div className="scroll-hint">SCROLL TO EXPLORE</div>
+      </div>
+    </section>
+  );
+}
+
+function TransitionScene() {
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
+  const x1 = useTransform(scrollYProgress, [0, 1], ['-12%', '8%']);
+  const x2 = useTransform(scrollYProgress, [0, 1], ['10%', '-8%']);
+  const opacity = useTransform(scrollYProgress, [0.05, 0.35, 0.8, 1], [0, 1, 1, 0]);
+
+  return (
+    <section ref={ref} className="transition-scene">
+      <div className="transition-sticky">
+        <motion.div style={{ x: x1, opacity }} className="transition-line">REAL WORKFLOWS</motion.div>
+        <motion.div style={{ x: x2, opacity }} className="transition-line outline">NOT DEMO SCREENS</motion.div>
+        <div className="transition-accent">01 / SELECTED WORK</div>
+      </div>
+    </section>
+  );
+}
+
+function ProjectScene({ project, index }: { project: (typeof projects)[number]; index: number }) {
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
+  const progress = useSpring(scrollYProgress, { stiffness: 90, damping: 22, mass: .6 });
+
+  const titleY = useTransform(progress, [0.12, 0.38, 0.72], [80, 0, -34]);
+  const titleOpacity = useTransform(progress, [0.08, 0.28, 0.8, 0.95], [0, 1, 1, 0]);
+  const metricX = useTransform(progress, [0.1, 0.4], [80, 0]);
+  const metricOpacity = useTransform(progress, [0.1, 0.36, 0.84, 0.97], [0, 1, 1, 0]);
+  const wash = useTransform(progress, [0.1, 0.55, 0.9], [0, .95, 0]);
+
+  const reverse = index % 2 === 1;
+
+  return (
+    <section ref={ref} className={`project-scene ${reverse ? 'reverse' : ''}`}>
+      <div className="project-sticky">
+        <motion.div className="project-wash" style={{ opacity: wash }} />
+        <div className="project-scene-number">{project.number}</div>
+
+        <motion.div className="project-story" style={{ y: titleY, opacity: titleOpacity }}>
+          <p className="project-category">{project.category}</p>
+          <h2>{project.title}</h2>
+          <p className="project-description">{project.description}</p>
+          <div className="project-tech">
+            {project.technologies.map((tech) => <span key={tech}>{tech}</span>)}
+          </div>
+        </motion.div>
+
+        <motion.div className="metric-stage" style={{ x: metricX, opacity: metricOpacity }}>
+          {project.metrics.map(([value, label], i) => (
+            <motion.div
+              className="metric-row"
+              key={label}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: false, amount: .65 }}
+              transition={{ duration: .55, delay: i * .08 }}
+            >
+              <strong>{value}</strong>
+              <span>{label}</span>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        <div className="project-index-caption">PROJECT {project.number} / 04</div>
+      </div>
+    </section>
+  );
+}
+
+function ExperienceScene() {
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] });
+  const lineScale = useTransform(scrollYProgress, [0.08, .88], [0, 1]);
+
+  return (
+    <section ref={ref} id="experience" className="experience-cinema">
+      <div className="experience-heading-sticky">
+        <p className="section-index">02 / EXPERIENCE</p>
+        <h2>Network context.<br />Software mindset.<br />Product delivery.</h2>
+        <p className="heading-note">A career moving from network engineering into software and automation.</p>
+      </div>
+
+      <div className="experience-track">
+        <div className="timeline-rail"><motion.div className="timeline-fill" style={{ scaleY: lineScale }} /></div>
+        {experience.map((role, index) => (
+          <motion.article
+            className="experience-card-cinema"
+            key={role.period}
+            initial={{ opacity: 0.18, y: 70, scale: .96 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: false, amount: .55 }}
+            transition={{ duration: .7, ease: [0.22, 1, .36, 1] }}
+          >
+            <div className="experience-step">0{index + 1}</div>
+            <p className="experience-period">{role.period}</p>
+            <p className="experience-company">{role.company}</p>
+            <h3>{role.role}</h3>
+            <p className="experience-description">{role.description}</p>
+            <div className="experience-tags">
+              {role.technologies.map((tech) => <span key={tech}>{tech}</span>)}
+            </div>
+            <p className="experience-location">{role.location}</p>
+          </motion.article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function StackScene() {
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
+  const band1 = useTransform(scrollYProgress, [0, 1], ['-6%', '8%']);
+  const band2 = useTransform(scrollYProgress, [0, 1], ['8%', '-6%']);
+
+  return (
+    <section ref={ref} id="stack" className="stack-cinema">
+      <div className="stack-intro">
+        <p className="section-index">03 / TOOLKIT</p>
+        <h2>Technology is the medium.<br />Outcomes are the point.</h2>
+      </div>
+
+      <div className="skill-bands" aria-hidden="true">
+        <motion.div style={{ x: band1 }}>PYTHON · DJANGO · AUTOMATION · APIs · PYTHON · DJANGO · AUTOMATION · APIs ·</motion.div>
+        <motion.div style={{ x: band2 }}>REACT · SQL · POWER BI · RAG · AGENTS · REACT · SQL · POWER BI · RAG · AGENTS ·</motion.div>
+      </div>
+
+      <div className="stack-cards-cinema">
+        {skillGroups.map(([name, skills], index) => (
+          <motion.article
+            className="stack-card-cinema"
+            key={name}
+            initial={{ opacity: 0, y: 80, rotateX: 8 }}
+            whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+            viewport={{ once: false, amount: .35 }}
+            transition={{ duration: .7, delay: index * .05 }}
+          >
+            <span className="stack-number">0{index + 1}</span>
+            <h3>{name}</h3>
+            <div className="stack-tags">
+              {skills.map((skill) => <span key={skill}>{skill}</span>)}
+            </div>
+          </motion.article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function ManifestoScene() {
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] });
+  const bg = useTransform(scrollYProgress, [0, .2, .8, 1], ['#0a0a0a', '#f3eee3', '#f3eee3', '#0a0a0a']);
+  const textY = useTransform(scrollYProgress, [0.1, .45, .8], [120, 0, -70]);
+  const textOpacity = useTransform(scrollYProgress, [0.08, .3, .78, .92], [0, 1, 1, 0]);
+  const textColor = useTransform(scrollYProgress, [0.15, .3, .78, .9], ['#f4f0e8', '#111111', '#111111', '#f4f0e8']);
+
+  return (
+    <motion.section ref={ref} className="manifesto-scene" style={{ backgroundColor: bg }}>
+      <div className="manifesto-sticky">
+        <motion.div style={{ y: textY, opacity: textOpacity, color: textColor }}>
+          <p>I like software that quietly removes friction.</p>
+          <h2>Clear interfaces.<br />Reliable backends.<br />Automation that gives people time back.</h2>
+        </motion.div>
+      </div>
+    </motion.section>
+  );
+}
+
+function ContactScene() {
+  return (
+    <section id="contact" className="contact-cinema">
+      <motion.div
+        className="contact-cinema-copy"
+        initial={{ opacity: 0, y: 80 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: false, amount: .35 }}
+        transition={{ duration: .8, ease: [0.22, 1, .36, 1] }}
+      >
+        <p className="section-index">04 / CONTACT</p>
+        <h2>Building the next useful system.</h2>
+        <p>Open to Backend Software Engineer, Full-Stack Engineer and AI Application Engineer opportunities in Canada.</p>
+      </motion.div>
+
+      <motion.div
+        className="contact-cinema-panel"
+        initial={{ opacity: 0, x: 80 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: false, amount: .35 }}
+        transition={{ duration: .8, delay: .08 }}
+      >
+        <p className="contact-kicker">CURRENT FOCUS</p>
+        <h3>Python backends, automation and practical AI products.</h3>
+        <p className="contact-note">Toronto, ON · Canadian Permanent Resident</p>
+        <a href="https://github.com/kumarG99" target="_blank" rel="noreferrer" className="contact-link">
+          <Github size={18} /> GitHub <ArrowUpRight size={18} />
+        </a>
+      </motion.div>
+
+      <div className="contact-location"><MapPin size={16} /> Toronto, ON, Canada</div>
+    </section>
+  );
+}
+
 export default function App() {
+  const { scrollYProgress } = useScroll();
+  const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30, restDelta: .001 });
+
   return (
     <div className="site-shell">
+      <motion.div className="scroll-progress" style={{ scaleX: progress }} />
+
       <header className="topbar">
-        <button className="brand" onClick={() => scrollTo('top')} aria-label="Back to top">
-          KG<span>.</span>
-        </button>
+        <button className="brand" onClick={() => scrollTo('top')} aria-label="Back to top">KG<span>.</span></button>
         <nav className="nav-links" aria-label="Primary navigation">
           <button onClick={() => scrollTo('work')}>Work</button>
           <button onClick={() => scrollTo('experience')}>Experience</button>
           <button onClick={() => scrollTo('stack')}>Stack</button>
           <button onClick={() => scrollTo('contact')}>Contact</button>
         </nav>
-        <button className="small-cta" onClick={() => scrollTo('contact')}>
-          Let’s talk <ArrowUpRight size={16} />
-        </button>
+        <button className="small-cta" onClick={() => scrollTo('contact')}>Let’s talk <ArrowUpRight size={16} /></button>
       </header>
 
-      <main id="top">
-        <section className="hero-section">
-          <div className="hero-grid-overlay" />
-          <motion.div className="hero-copy" {...reveal}>
-            <p className="eyebrow">Toronto · Backend · Automation · AI</p>
-            <h1>
-              I build systems
-              <span>that move work forward.</span>
-            </h1>
-            <p className="hero-subtitle">
-              Software-focused network engineer building Python backends, automation platforms,
-              internal web products and practical AI applications.
-            </p>
-            <div className="hero-actions">
-              <button className="primary-cta" onClick={() => scrollTo('work')}>
-                View selected work <ArrowDownRight size={18} />
-              </button>
-              <button className="text-cta" onClick={() => scrollTo('experience')}>
-                See experience
-              </button>
-            </div>
-          </motion.div>
-
-          <motion.div
-            className="hero-portrait-wrap"
-            initial={{ opacity: 0, scale: 0.96, y: 24 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <div className="portrait-glow" />
-            <img src="/kumar-hero.jpg" alt="Kumar Guddepogu" className="hero-portrait" />
-            <div className="portrait-caption">
-              <span>Open to Backend, Software & AI Application Engineering roles</span>
-              <span className="status-dot">●</span>
-            </div>
-          </motion.div>
-
-          <div className="hero-side-label">PORTFOLIO / 2026</div>
-        </section>
+      <main>
+        <Hero />
 
         <section className="marquee" aria-label="Technology focus">
-          <div className="marquee-track">
-            <span>PYTHON</span><i>✦</i><span>DJANGO</span><i>✦</i><span>AUTOMATION</span><i>✦</i>
-            <span>REACT</span><i>✦</i><span>APIs</span><i>✦</i><span>AI APPLICATIONS</span><i>✦</i>
-          </div>
-        </section>
-
-        <section id="work" className="section-block projects-section">
-          <motion.div className="section-heading" {...reveal}>
-            <p className="section-index">01 / SELECTED WORK</p>
-            <h2>Built for real workflows, not demo screens.</h2>
+          <motion.div
+            className="marquee-track-cinema"
+            animate={{ x: ['0%', '-50%'] }}
+            transition={{ duration: 24, repeat: Infinity, ease: 'linear' }}
+          >
+            <span>PYTHON ✦ DJANGO ✦ AUTOMATION ✦ REACT ✦ APIs ✦ AI APPLICATIONS ✦ </span>
+            <span>PYTHON ✦ DJANGO ✦ AUTOMATION ✦ REACT ✦ APIs ✦ AI APPLICATIONS ✦ </span>
           </motion.div>
-
-          <div className="project-list">
-            {projects.map((project, index) => (
-              <motion.article key={project.title} className="project-card" {...reveal}>
-                <div className="project-number">0{index + 1}</div>
-                <div className="project-main">
-                  <p className="project-category">{project.category}</p>
-                  <h3>{project.title}</h3>
-                  <p>{project.description}</p>
-                  <div className="project-tech">
-                    {project.technologies.map((tech) => <span key={tech}>{tech}</span>)}
-                  </div>
-                </div>
-                <div className="project-metrics">
-                  {project.metrics.map(([value, label]) => (
-                    <div key={label}>
-                      <strong>{value}</strong>
-                      <span>{label}</span>
-                    </div>
-                  ))}
-                </div>
-              </motion.article>
-            ))}
-          </div>
         </section>
 
-        <section id="experience" className="section-block experience-section">
-          <motion.div className="section-heading split-heading" {...reveal}>
-            <div>
-              <p className="section-index">02 / EXPERIENCE</p>
-              <h2>Network context. Software mindset. Product delivery.</h2>
-            </div>
-            <p className="heading-note">A career moving from network engineering into software and automation.</p>
-          </motion.div>
-
-          <div className="experience-list">
-            {experience.map((role) => (
-              <motion.article className="experience-row" key={role.period} {...reveal}>
-                <div className="experience-period">{role.period}</div>
-                <div className="experience-body">
-                  <p className="experience-company">{role.company}</p>
-                  <h3>{role.role}</h3>
-                  <p>{role.description}</p>
-                  <div className="experience-tags">
-                    {role.technologies.map((tech) => <span key={tech}>{tech}</span>)}
-                  </div>
-                </div>
-                <div className="experience-location">{role.location}</div>
-              </motion.article>
-            ))}
-          </div>
-        </section>
-
-        <section id="stack" className="section-block stack-section">
-          <motion.div className="section-heading" {...reveal}>
-            <p className="section-index">03 / TOOLKIT</p>
-            <h2>Technology is the medium. Outcomes are the point.</h2>
-          </motion.div>
-
-          <div className="stack-grid">
-            {skillGroups.map((group) => (
-              <motion.div className="stack-card" key={group.id} {...reveal}>
-                <div className="stack-topline"><span>{group.id}</span><span>{group.name}</span></div>
-                <p>{group.description}</p>
-                <div className="stack-tags">
-                  {group.skills.map((skill) => <span key={skill}>{skill}</span>)}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </section>
-
-        <section className="statement-section">
-          <motion.p {...reveal}>I like software that quietly removes friction.</motion.p>
-          <motion.h2 {...reveal}>
-            Clear interfaces. Reliable backends. Automation that gives people time back.
-          </motion.h2>
-        </section>
-
-        <section id="contact" className="contact-section">
-          <motion.div className="contact-copy" {...reveal}>
-            <p className="section-index">04 / CONTACT</p>
-            <h2>Building the next useful system.</h2>
-            <p>
-              Open to Backend Software Engineer, Full-Stack Engineer and AI Application Engineer opportunities in Canada.
-            </p>
-            <div className="role-chips">
-              <span>Backend Engineering</span>
-              <span>Full-Stack</span>
-              <span>Python Automation</span>
-              <span>AI Applications</span>
-            </div>
-          </motion.div>
-
-          <motion.div className="contact-panel" {...reveal}>
-            <p className="contact-kicker">Current focus</p>
-            <h3>Python backends, automation and practical AI products.</h3>
-            <p className="contact-note">Toronto, ON · Canadian Permanent Resident</p>
-            <a href="https://github.com/kumarG99" target="_blank" rel="noreferrer" className="contact-link">
-              <Github size={18} /> GitHub <ArrowUpRight size={18} />
-            </a>
-            <p className="contact-placeholder">Add your LinkedIn and email here before sending the portfolio broadly.</p>
-          </motion.div>
-
-          <div className="contact-meta"><MapPin size={16} /> Toronto, ON, Canada</div>
-        </section>
+        <div id="work"><TransitionScene /></div>
+        {projects.map((project, index) => <ProjectScene key={project.title} project={project} index={index} />)}
+        <ExperienceScene />
+        <StackScene />
+        <ManifestoScene />
+        <ContactScene />
       </main>
 
       <footer className="site-footer">
         <span>© {new Date().getFullYear()} Kumar Guddepogu</span>
-        <span>Designed for clarity, built for speed.</span>
+        <span>Designed for clarity, built for motion.</span>
       </footer>
     </div>
   );
