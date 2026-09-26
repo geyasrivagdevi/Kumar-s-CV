@@ -114,28 +114,170 @@ button { color: inherit; }
 .transition-line.outline { color: transparent; -webkit-text-stroke: 1px rgba(244,240,232,.42); padding-left: 16vw; }
 .transition-accent { position: absolute; left: 4vw; bottom: 42px; color: var(--accent); font-size: .7rem; letter-spacing: .18em; font-weight: 800; }
 
-/* PROJECT SCENES */
-.project-scene { height: 145vh; position: relative; }
-.project-sticky {
-  position: sticky; top: 0; min-height: 100svh; padding: 110px 4vw 54px; overflow: hidden;
-  display: grid; grid-template-columns: minmax(0,1.2fr) minmax(280px,.55fr); gap: 8vw; align-items: center;
-  border-bottom: 1px solid var(--line); background: #0a0a0a;
+/* PROJECT SCENES — fixed cinematic stage
+   Story always stays left; metrics always stay right. */
+.project-scene {
+  height: 138vh;
+  position: relative;
 }
-.project-scene.reverse .project-story { order: 2; }
-.project-scene.reverse .metric-stage { order: 1; }
-.project-wash { position: absolute; inset: 0; background: radial-gradient(circle at 20% 55%, rgba(215,255,67,.07), transparent 34%), linear-gradient(120deg, rgba(255,255,255,.015), transparent 48%); pointer-events: none; }
-.project-scene.reverse .project-wash { background: radial-gradient(circle at 80% 45%, rgba(215,255,67,.065), transparent 34%), linear-gradient(240deg, rgba(255,255,255,.015), transparent 48%); }
-.project-scene-number { position: absolute; right: 4vw; top: 104px; font-size: clamp(5rem, 12vw, 13rem); color: rgba(255,255,255,.035); letter-spacing: -.07em; font-weight: 800; }
-.project-story { position: relative; z-index: 2; max-width: 920px; }
-.project-story h2 { margin: 12px 0 22px; font-size: clamp(3rem, 6vw, 6.3rem); line-height: .94; letter-spacing: -.058em; font-weight: 500; }
-.project-description { max-width: 760px; color: #aaa69e; line-height: 1.6; font-size: clamp(1rem, 1.4vw, 1.2rem); }
-.project-tech, .experience-tags, .stack-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
-.project-tech span, .experience-tags span, .stack-tags span { border: 1px solid var(--line); color: #bbb7af; border-radius: 999px; padding: 7px 10px; font-size: .72rem; }
-.metric-stage { position: relative; z-index: 2; border-top: 1px solid var(--line); }
-.metric-row { padding: 24px 0; border-bottom: 1px solid var(--line); }
-.metric-row strong { display: block; font-size: clamp(2rem, 4vw, 4rem); letter-spacing: -.05em; }
-.metric-row span { display: block; margin-top: 6px; color: #86827b; font-size: .75rem; text-transform: uppercase; letter-spacing: .1em; }
-.project-index-caption { position: absolute; left: 4vw; bottom: 28px; color: #77736d; font-size: .65rem; letter-spacing: .16em; }
+
+.project-sticky {
+  position: sticky;
+  top: 0;
+  min-height: 100svh;
+  padding: 118px 4vw 58px;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(0, 1.32fr) minmax(300px, .58fr);
+  gap: clamp(44px, 6vw, 100px);
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  background: #0a0a0a;
+}
+
+.project-wash {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 18% 52%, rgba(215,255,67,.065), transparent 32%),
+    linear-gradient(115deg, rgba(255,255,255,.018), transparent 50%);
+  pointer-events: none;
+}
+
+.project-stage-label {
+  position: absolute;
+  top: 100px;
+  left: 4vw;
+  right: 4vw;
+  z-index: 3;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #77736d;
+  font-size: .64rem;
+  font-weight: 750;
+  letter-spacing: .16em;
+}
+
+.project-stage-label span:first-child { color: var(--accent); }
+
+.project-scene-number {
+  position: absolute;
+  right: 3vw;
+  top: 92px;
+  font-size: clamp(6rem, 13vw, 14rem);
+  color: rgba(255,255,255,.028);
+  letter-spacing: -.075em;
+  font-weight: 800;
+  pointer-events: none;
+}
+
+.project-story {
+  position: relative;
+  z-index: 2;
+  max-width: 930px;
+  padding-top: 24px;
+}
+
+.project-story h2 {
+  margin: 12px 0 22px;
+  max-width: 880px;
+  font-size: clamp(3rem, 5.8vw, 6.1rem);
+  line-height: .94;
+  letter-spacing: -.058em;
+  font-weight: 500;
+}
+
+.project-description {
+  max-width: 720px;
+  color: #aaa69e;
+  line-height: 1.62;
+  font-size: clamp(1rem, 1.35vw, 1.18rem);
+}
+
+.project-tech,
+.experience-tags,
+.stack-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 22px;
+}
+
+.project-tech span,
+.experience-tags span,
+.stack-tags span {
+  border: 1px solid var(--line);
+  color: #bbb7af;
+  border-radius: 999px;
+  padding: 7px 10px;
+  font-size: .72rem;
+}
+
+.metric-stage {
+  position: relative;
+  z-index: 2;
+  padding-left: clamp(28px, 3vw, 52px);
+  border-left: 1px solid var(--line-strong);
+}
+
+.metric-kicker {
+  margin: 0 0 8px;
+  color: #77736d;
+  font-size: .64rem;
+  font-weight: 750;
+  letter-spacing: .16em;
+}
+
+.metric-row {
+  padding: 22px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.metric-row:first-of-type { border-top: 1px solid var(--line); }
+
+.metric-row strong {
+  display: block;
+  font-size: clamp(2rem, 3.7vw, 3.8rem);
+  letter-spacing: -.05em;
+  line-height: 1;
+}
+
+.metric-row span {
+  display: block;
+  margin-top: 7px;
+  color: #86827b;
+  font-size: .72rem;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+}
+
+.project-scroll-rail {
+  position: absolute;
+  right: 22px;
+  top: 31%;
+  bottom: 31%;
+  width: 1px;
+  background: rgba(255,255,255,.10);
+}
+
+.project-scroll-fill {
+  width: 1px;
+  height: 100%;
+  background: var(--accent);
+  transform-origin: top;
+}
+
+.project-index-caption {
+  position: absolute;
+  left: 4vw;
+  bottom: 28px;
+  color: #77736d;
+  font-size: .64rem;
+  letter-spacing: .13em;
+}
+
+.project-index-caption span { color: var(--accent); }
 
 /* EXPERIENCE */
 .experience-cinema { display: grid; grid-template-columns: minmax(320px,.8fr) minmax(0,1.2fr); min-height: 190vh; border-bottom: 1px solid var(--line); scroll-margin-top: 80px; }
@@ -194,10 +336,18 @@ button { color: inherit; }
   .hero-image-stage { width: min(72vw, 560px); justify-self: start; }
   .hero-image-cinema { aspect-ratio: 16/10; }
   .availability-card { left: 16px; }
-  .project-sticky { grid-template-columns: 1fr; align-content: center; gap: 36px; }
-  .project-scene.reverse .project-story, .project-scene.reverse .metric-stage { order: unset; }
-  .metric-stage { display: grid; grid-template-columns: repeat(3,1fr); }
-  .metric-row { border-right: 1px solid var(--line); padding-right: 18px; }
+  .project-sticky { grid-template-columns: 1fr; align-content: center; gap: 34px; }
+  .metric-stage {
+    padding-left: 0;
+    border-left: 0;
+    border-top: 1px solid var(--line-strong);
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 18px;
+  }
+  .metric-kicker { grid-column: 1 / -1; margin-top: 16px; }
+  .metric-row { border-right: 1px solid var(--line); padding: 18px 14px 18px 0; }
+  .metric-row:last-child { border-right: 0; }
   .experience-cinema { grid-template-columns: 1fr; min-height: auto; }
   .experience-heading-sticky { position: relative; top: auto; min-height: auto; border-right: 0; border-bottom: 1px solid var(--line); }
   .experience-track { padding: 90px 4vw 110px 9vw; gap: 100px; }
@@ -218,13 +368,30 @@ button { color: inherit; }
   .hero-vertical-label, .scroll-hint { display: none; }
   .transition-line { font-size: clamp(3rem, 15vw, 5.6rem); }
   .transition-line.outline { padding-left: 6vw; }
-  .project-scene { height: 130vh; }
-  .project-sticky { padding: 96px 20px 42px; }
-  .project-story h2 { font-size: clamp(2.5rem, 12vw, 4.4rem); }
-  .metric-stage { grid-template-columns: 1fr; }
-  .metric-row { border-right: 0; }
-  .project-scene-number { top: 84px; right: 20px; }
-  .project-index-caption { left: 20px; }
+  .project-scene { height: auto; min-height: 100svh; }
+  .project-sticky {
+    position: relative;
+    top: auto;
+    min-height: 100svh;
+    padding: 106px 20px 70px;
+    align-content: center;
+  }
+  .project-stage-label { top: 82px; left: 20px; right: 20px; }
+  .project-story { padding-top: 34px; }
+  .project-story h2 { font-size: clamp(2.5rem, 11vw, 4.2rem); }
+  .metric-stage {
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    gap: 8px;
+  }
+  .metric-row {
+    border-right: 1px solid var(--line);
+    padding: 14px 8px 14px 0;
+  }
+  .metric-row strong { font-size: clamp(1.25rem, 7vw, 2rem); }
+  .metric-row span { font-size: .58rem; letter-spacing: .07em; }
+  .project-scene-number { top: 78px; right: 20px; }
+  .project-scroll-rail { display: none; }
+  .project-index-caption { left: 20px; bottom: 22px; }
   .experience-heading-sticky { padding: 86px 20px 70px; }
   .experience-heading-sticky h2 { font-size: clamp(2.7rem, 13vw, 4.6rem); }
   .experience-track { padding: 70px 20px 90px 48px; }

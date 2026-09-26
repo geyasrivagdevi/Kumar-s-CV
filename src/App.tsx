@@ -210,23 +210,28 @@ function TransitionScene() {
 function ProjectScene({ project, index }: { project: (typeof projects)[number]; index: number }) {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
-  const progress = useSpring(scrollYProgress, { stiffness: 90, damping: 22, mass: .6 });
+  const progress = useSpring(scrollYProgress, { stiffness: 90, damping: 24, mass: .65 });
 
-  const titleY = useTransform(progress, [0.12, 0.38, 0.72], [80, 0, -34]);
-  const titleOpacity = useTransform(progress, [0.08, 0.28, 0.8, 0.95], [0, 1, 1, 0]);
-  const metricX = useTransform(progress, [0.1, 0.4], [80, 0]);
-  const metricOpacity = useTransform(progress, [0.1, 0.36, 0.84, 0.97], [0, 1, 1, 0]);
-  const wash = useTransform(progress, [0.1, 0.55, 0.9], [0, .95, 0]);
-
-  const reverse = index % 2 === 1;
+  const storyY = useTransform(progress, [0.1, 0.34, 0.74, 0.94], [58, 0, -18, -42]);
+  const storyOpacity = useTransform(progress, [0.08, 0.26, 0.82, 0.96], [0, 1, 1, 0]);
+  const metricsX = useTransform(progress, [0.12, 0.36], [48, 0]);
+  const metricsOpacity = useTransform(progress, [0.1, 0.3, 0.84, 0.97], [0, 1, 1, 0]);
+  const wash = useTransform(progress, [0.1, 0.5, 0.9], [0, 1, 0]);
+  const progressScale = useTransform(progress, [0.12, 0.88], [0, 1]);
 
   return (
-    <section ref={ref} className={`project-scene ${reverse ? 'reverse' : ''}`}>
+    <section ref={ref} className="project-scene">
       <div className="project-sticky">
         <motion.div className="project-wash" style={{ opacity: wash }} />
-        <div className="project-scene-number">{project.number}</div>
 
-        <motion.div className="project-story" style={{ y: titleY, opacity: titleOpacity }}>
+        <div className="project-stage-label">
+          <span>SELECTED WORK</span>
+          <span>{project.number} / 04</span>
+        </div>
+
+        <div className="project-scene-number" aria-hidden="true">{project.number}</div>
+
+        <motion.div className="project-story" style={{ y: storyY, opacity: storyOpacity }}>
           <p className="project-category">{project.category}</p>
           <h2>{project.title}</h2>
           <p className="project-description">{project.description}</p>
@@ -235,23 +240,23 @@ function ProjectScene({ project, index }: { project: (typeof projects)[number]; 
           </div>
         </motion.div>
 
-        <motion.div className="metric-stage" style={{ x: metricX, opacity: metricOpacity }}>
-          {project.metrics.map(([value, label], i) => (
-            <motion.div
-              className="metric-row"
-              key={label}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false, amount: .65 }}
-              transition={{ duration: .55, delay: i * .08 }}
-            >
+        <motion.aside className="metric-stage" style={{ x: metricsX, opacity: metricsOpacity }}>
+          <p className="metric-kicker">IMPACT / SCALE</p>
+          {project.metrics.map(([value, label]) => (
+            <div className="metric-row" key={label}>
               <strong>{value}</strong>
               <span>{label}</span>
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </motion.aside>
 
-        <div className="project-index-caption">PROJECT {project.number} / 04</div>
+        <div className="project-scroll-rail" aria-hidden="true">
+          <motion.div className="project-scroll-fill" style={{ scaleY: progressScale }} />
+        </div>
+
+        <div className="project-index-caption">
+          Scroll to continue <span>↓</span>
+        </div>
       </div>
     </section>
   );
