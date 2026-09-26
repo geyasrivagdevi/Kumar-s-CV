@@ -1,14 +1,112 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { ArrowDownRight, ArrowUpRight, Github, Linkedin, Mail, MapPin } from 'lucide-react';
-import { PERSONAL_INFO, PROJECTS, EXPERIENCES, SKILL_CATEGORIES } from './data/portfolioData';
+import { ArrowDownRight, ArrowUpRight, Github, MapPin } from 'lucide-react';
 
 const reveal = {
   initial: { opacity: 0, y: 28 },
   whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, amount: 0.2 },
-  transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const },
+  viewport: { once: true, amount: 0.18 },
+  transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] as const },
 };
+
+const projects = [
+  {
+    category: 'NETWORK PLANNING PLATFORM',
+    title: 'Port Inventory & Reservation Platform',
+    description:
+      'Replaced spreadsheet and email-based port reservation with a searchable web workflow used by network planners to find, reserve and track available capacity.',
+    technologies: ['Python', 'Django', 'MySQL', 'JavaScript', 'DataTables'],
+    metrics: [
+      ['322', 'Routers'],
+      ['50,526', 'Ports indexed'],
+      ['~30%', 'Ports reserved'],
+    ],
+  },
+  {
+    category: 'NETWORK AUTOMATION',
+    title: 'Network Management / SSH Portal',
+    description:
+      'Built a centralized portal for authenticated router access and operational workflows, reducing repetitive device-by-device access for the engineering team.',
+    technologies: ['Python', 'Django', 'SSH', 'Paramiko', 'MySQL'],
+    metrics: [
+      ['~700', 'Routers'],
+      ['25+', 'Users'],
+      ['1', 'Centralized portal'],
+    ],
+  },
+  {
+    category: 'ENTERPRISE REPORTING',
+    title: 'Budget Reporting Platform',
+    description:
+      'Contributed to a Laravel-based CAPEX/OPEX submission and reporting platform with multi-team usage, structured workflows and an auditable change history.',
+    technologies: ['PHP', 'Laravel', 'MySQL', 'JavaScript', 'Reporting'],
+    metrics: [
+      ['Multi-team', 'Adoption'],
+      ['CAPEX / OPEX', 'Workflow'],
+      ['Audit trail', 'Traceability'],
+    ],
+  },
+  {
+    category: 'AUTOMATION & ANALYTICS',
+    title: 'Planning Automation & Operational Dashboards',
+    description:
+      'Built recurring automation and dashboards that turned manual hourly, weekly and monthly planning tasks into repeatable workflows used by planners and leadership.',
+    technologies: ['Python', 'SQL', 'Excel Automation', 'Power BI', 'Chart.js'],
+    metrics: [
+      ['Hourly', 'Automation'],
+      ['Weekly / Monthly', 'Reporting'],
+      ['Hours/day', 'Manual effort saved'],
+    ],
+  },
+];
+
+const experience = [
+  {
+    period: 'NOV 2023 — PRESENT',
+    company: 'ROGERS COMMUNICATIONS',
+    role: 'Network Designer',
+    location: 'Toronto, ON, Canada',
+    description:
+      'Builds internal software, network-planning automation and reporting tools across wireline and wireless workflows. Owns and supports web applications that replace manual planning processes with searchable, auditable systems.',
+    technologies: ['Python', 'Django', 'MySQL', 'JavaScript', 'Laravel', 'Power BI'],
+  },
+  {
+    period: 'SEP 2022 — NOV 2023',
+    company: 'ROGERS COMMUNICATIONS',
+    role: 'Network Engineer Co-op',
+    location: 'Toronto, ON, Canada',
+    description:
+      'Started in network engineering and progressively moved deeper into software automation, internal tooling, reporting and workflow modernization for planning teams.',
+    technologies: ['Python', 'SQL', 'Automation', 'Networking', 'Git', 'Web Tools'],
+  },
+];
+
+const skillGroups = [
+  {
+    id: '01',
+    name: 'BACKEND',
+    description: 'Production-focused backend development and internal tooling.',
+    skills: ['Python', 'Django', 'REST APIs', 'PHP / Laravel', 'SQL'],
+  },
+  {
+    id: '02',
+    name: 'FRONTEND',
+    description: 'Practical interfaces for internal products, planners and operations teams.',
+    skills: ['React', 'JavaScript', 'HTML / CSS', 'DataTables', 'Chart.js'],
+  },
+  {
+    id: '03',
+    name: 'DATA & PLATFORM',
+    description: 'Databases, reporting and deployment environments used in day-to-day engineering.',
+    skills: ['MySQL', 'Power BI', 'Excel Automation', 'Git / GitHub', 'Linux / RHEL', 'IIS / Apache'],
+  },
+  {
+    id: '04',
+    name: 'AI / CURRENT FOCUS',
+    description: 'Building toward practical AI application engineering on top of a software foundation.',
+    skills: ['RAG', 'LLM APIs', 'AI Agents', 'MCP', 'GitHub Copilot'],
+  },
+];
 
 const scrollTo = (id: string) => {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
@@ -42,8 +140,8 @@ export default function App() {
               <span>that move work forward.</span>
             </h1>
             <p className="hero-subtitle">
-              Backend engineer focused on Python, automation platforms, production web systems,
-              and practical AI applications.
+              Software-focused network engineer building Python backends, automation platforms,
+              internal web products and practical AI applications.
             </p>
             <div className="hero-actions">
               <button className="primary-cta" onClick={() => scrollTo('work')}>
@@ -64,7 +162,7 @@ export default function App() {
             <div className="portrait-glow" />
             <img src="/kumar-hero.jpg" alt="Kumar Guddepogu" className="hero-portrait" />
             <div className="portrait-caption">
-              <span>Available for software / backend / AI application roles</span>
+              <span>Open to Backend, Software & AI Application Engineering roles</span>
               <span className="status-dot">●</span>
             </div>
           </motion.div>
@@ -86,22 +184,22 @@ export default function App() {
           </motion.div>
 
           <div className="project-list">
-            {PROJECTS.slice(0, 4).map((project, index) => (
-              <motion.article key={project.id} className="project-card" {...reveal}>
+            {projects.map((project, index) => (
+              <motion.article key={project.title} className="project-card" {...reveal}>
                 <div className="project-number">0{index + 1}</div>
                 <div className="project-main">
                   <p className="project-category">{project.category}</p>
                   <h3>{project.title}</h3>
-                  <p>{project.tagline}</p>
+                  <p>{project.description}</p>
                   <div className="project-tech">
-                    {project.technologies.slice(0, 5).map((tech) => <span key={tech}>{tech}</span>)}
+                    {project.technologies.map((tech) => <span key={tech}>{tech}</span>)}
                   </div>
                 </div>
                 <div className="project-metrics">
-                  {project.metrics.slice(0, 3).map((metric) => (
-                    <div key={metric.label}>
-                      <strong>{metric.value}</strong>
-                      <span>{metric.label}</span>
+                  {project.metrics.map(([value, label]) => (
+                    <div key={label}>
+                      <strong>{value}</strong>
+                      <span>{label}</span>
                     </div>
                   ))}
                 </div>
@@ -114,21 +212,21 @@ export default function App() {
           <motion.div className="section-heading split-heading" {...reveal}>
             <div>
               <p className="section-index">02 / EXPERIENCE</p>
-              <h2>Engineering across systems, automation and product delivery.</h2>
+              <h2>Network context. Software mindset. Product delivery.</h2>
             </div>
-            <p className="heading-note">Less résumé wall. More signal.</p>
+            <p className="heading-note">A career moving from network engineering into software and automation.</p>
           </motion.div>
 
           <div className="experience-list">
-            {EXPERIENCES.map((role) => (
-              <motion.article className="experience-row" key={role.id} {...reveal}>
+            {experience.map((role) => (
+              <motion.article className="experience-row" key={role.period} {...reveal}>
                 <div className="experience-period">{role.period}</div>
                 <div className="experience-body">
                   <p className="experience-company">{role.company}</p>
                   <h3>{role.role}</h3>
                   <p>{role.description}</p>
                   <div className="experience-tags">
-                    {role.technologies.slice(0, 6).map((tech) => <span key={tech}>{tech}</span>)}
+                    {role.technologies.map((tech) => <span key={tech}>{tech}</span>)}
                   </div>
                 </div>
                 <div className="experience-location">{role.location}</div>
@@ -144,7 +242,7 @@ export default function App() {
           </motion.div>
 
           <div className="stack-grid">
-            {SKILL_CATEGORIES.map((group) => (
+            {skillGroups.map((group) => (
               <motion.div className="stack-card" key={group.id} {...reveal}>
                 <div className="stack-topline"><span>{group.id}</span><span>{group.name}</span></div>
                 <p>{group.description}</p>
@@ -166,15 +264,29 @@ export default function App() {
         <section id="contact" className="contact-section">
           <motion.div className="contact-copy" {...reveal}>
             <p className="section-index">04 / CONTACT</p>
-            <h2>Have a system to build?</h2>
-            <p>Let’s talk about backend engineering, automation, or AI application work.</p>
+            <h2>Building the next useful system.</h2>
+            <p>
+              Open to Backend Software Engineer, Full-Stack Engineer and AI Application Engineer opportunities in Canada.
+            </p>
+            <div className="role-chips">
+              <span>Backend Engineering</span>
+              <span>Full-Stack</span>
+              <span>Python Automation</span>
+              <span>AI Applications</span>
+            </div>
           </motion.div>
-          <motion.div className="contact-links" {...reveal}>
-            <a href={`mailto:${PERSONAL_INFO.email}`}><Mail size={18} /> Email <ArrowUpRight size={18} /></a>
-            <a href={PERSONAL_INFO.linkedin} target="_blank" rel="noreferrer"><Linkedin size={18} /> LinkedIn <ArrowUpRight size={18} /></a>
-            <a href={PERSONAL_INFO.github} target="_blank" rel="noreferrer"><Github size={18} /> GitHub <ArrowUpRight size={18} /></a>
+
+          <motion.div className="contact-panel" {...reveal}>
+            <p className="contact-kicker">Current focus</p>
+            <h3>Python backends, automation and practical AI products.</h3>
+            <p className="contact-note">Toronto, ON · Canadian Permanent Resident</p>
+            <a href="https://github.com/kumarG99" target="_blank" rel="noreferrer" className="contact-link">
+              <Github size={18} /> GitHub <ArrowUpRight size={18} />
+            </a>
+            <p className="contact-placeholder">Add your LinkedIn and email here before sending the portfolio broadly.</p>
           </motion.div>
-          <div className="contact-meta"><MapPin size={16} /> {PERSONAL_INFO.location}</div>
+
+          <div className="contact-meta"><MapPin size={16} /> Toronto, ON, Canada</div>
         </section>
       </main>
 
